@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Silent-SOS Server (VS Code Java)",
+            "request": "launch",
+            "mainClass": "com.silentsos.Main",
+            "projectName": "silent-sos"
+        }
+    ]
+}

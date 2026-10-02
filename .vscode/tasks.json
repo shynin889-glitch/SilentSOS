@@ -1,0 +1,21 @@
+﻿{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile Silent SOS",
+            "type": "shell",
+            "command": "javac -d bin -sourcepath src src/org/silentsos/Main.java",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$javac"]
+        },
+        {
+            "label": "Run Silent SOS (GUI)",
+            "type": "shell",
+            "command": "java -cp bin org.silentsos.Main",
+            "group": "test"
+        }
+    ]
+}

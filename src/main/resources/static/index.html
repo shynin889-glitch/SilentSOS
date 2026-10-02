@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Silent-SOS • Intelligent Emergency Response System</title>
+    <!-- Leaflet OpenStreetMap CDN for live GIS beacon tracking -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2222%22 font-size=%2222%22>🛡️</text></svg>">
+</head>
+<body>
+
+    <!-- Fluidic Ambient Stage: 4 Parallel Floating Liquid Mesh Orbs -->
+    <div class="fluid-ambient-stage">
+        <div class="fluid-orb fluid-orb-1"></div>
+        <div class="fluid-orb fluid-orb-2"></div>
+        <div class="fluid-orb fluid-orb-3"></div>
+        <div class="fluid-orb fluid-orb-4"></div>
+    </div>
+
+    <!-- Unified Glassmorphic App Header -->
+    <header class="app-header">
+        <div class="brand-wrapper">
+            <div class="brand-icon-shield">🛡️</div>
+            <div>
+                <h1 class="brand-title">SILENT-SOS</h1>
+                <p class="brand-subtitle">Covert Distress & Guardian Response</p>
+            </div>
+        </div>
+
+        <!-- Liquid Glass Navigation Pills -->
+        <nav class="nav-bar-tabs">
+            <button class="nav-pill active" onclick="switchView('disguise')">
+                <span>🧮</span> Calculator
+            </button>
+            <button class="nav-pill" onclick="switchView('tactical')">
+                <span>🚨</span> Tactical SOS
+            </button>
+            <button class="nav-pill" onclick="switchView('responder')">
+                <span>🗺️</span> Responder & Map
+            </button>
+            <button class="nav-pill" onclick="switchView('contacts')">
+                <span>👥</span> Guardians
+            </button>
+        </nav>
+
+        <!-- Quick Instant Calculator Mode Pill -->
+        <button class="quick-camouflage-btn" onclick="switchView('disguise')" title="Quickly switch to calculator (or press Esc)">
+            <span>🧮</span> Calculator Mode
+        </button>
+    </header>
+
+    <!-- Real-Time Telemetry HUD Command Bar -->
+    <div class="hud-ticker-bar">
+        <div class="hud-ticker-inner">
+            <div class="hud-item"><span class="hud-pulse-dot"></span> SYSTEM: <strong>ARMED & MONITORING</strong></div>
+            <div class="hud-divider"></div>
+            <div class="hud-item">🛰️ GPS: <span id="hudGps">12.9716, 77.5946 (±8.5m)</span></div>
+            <div class="hud-divider"></div>
+            <div class="hud-item">🔋 BATTERY: <span id="hudBattery">95%</span></div>
+            <div class="hud-divider"></div>
+            <div class="hud-item">📡 BEACONS ONLINE: <span id="hudBeacons">6 DETECTED</span></div>
+            <div class="hud-divider"></div>
+            <div class="hud-item">🛡️ ENCRYPTION: <strong>AES-GCM 256-BIT</strong></div>
+        </div>
+    </div>
+
+    <!-- Main Viewport Area -->
+    <main class="main-viewport">
+
+        <!-- ============================================================
+             VIEW 1: CALCULATOR
+             ============================================================ -->
+        <section id="view-disguise" class="view-section active-view">
+            <div class="glass-panel calc-wrapper">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                    <span id="calcTitle" style="font-size: 0.88rem; font-weight: 800; color: var(--text-secondary); cursor: pointer; letter-spacing: 0.5px;">CALCULATOR</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div id="covertBeacon" class="calc-power-dot"></div>
+                    </div>
+                </div>
+
+                <div class="calc-glass-screen">
+                    <div id="calcHistory" class="calc-history-display"></div>
+                    <div id="calcCurrent" class="calc-current-display">0</div>
+                </div>
+
+                <div class="calc-liquid-grid">
+                    <button class="liquid-calc-btn action-btn" data-val="C">C</button>
+                    <button class="liquid-calc-btn action-btn" data-val="BACK">⌫</button>
+                    <button class="liquid-calc-btn action-btn" data-val="%">%</button>
+                    <button class="liquid-calc-btn op-btn" data-val="÷">÷</button>
+
+                    <button class="liquid-calc-btn" data-val="7">7</button>
+                    <button class="liquid-calc-btn" data-val="8">8</button>
+                    <button class="liquid-calc-btn" data-val="9">9</button>
+                    <button class="liquid-calc-btn op-btn" data-val="×">×</button>
+
+                    <button class="liquid-calc-btn" data-val="4">4</button>
+                    <button class="liquid-calc-btn" data-val="5">5</button>
+                    <button class="liquid-calc-btn" data-val="6">6</button>
+                    <button class="liquid-calc-btn op-btn" data-val="-">-</button>
+
+                    <button class="liquid-calc-btn" data-val="1">1</button>
+                    <button class="liquid-calc-btn" data-val="2">2</button>
+                    <button class="liquid-calc-btn" data-val="3">3</button>
+                    <button class="liquid-calc-btn op-btn" data-val="+">+</button>
+
+                    <button class="liquid-calc-btn" data-val="0" style="grid-column: span 2;">0</button>
+                    <button class="liquid-calc-btn" data-val=".">.</button>
+                    <button class="liquid-calc-btn equals-btn" data-val="=" title="Tap 3 times quickly for discreet emergency trigger">=</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             VIEW 2: DIRECT TACTICAL EMERGENCY SOS PANEL
+             ============================================================ -->
+        <section id="view-tactical" class="view-section">
+            <div class="glass-panel tactical-wrapper">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+                    <div>
+                        <h2 style="font-size: 1.35rem; font-weight: 900; letter-spacing: -0.3px;">Tactical Distress Signal</h2>
+                        <p style="font-size: 0.8rem; color: var(--text-tertiary);">Direct panic activation & sensor telemetry</p>
+                    </div>
+                    <span class="badge-pill badge-CRITICAL">Active Shield</span>
+                </div>
+
+                <!-- Threat Level Pill Selector -->
+                <div class="threat-chips-grid">
+                    <div class="threat-glass-chip active-level" data-level="CRITICAL">🔴 Critical Danger</div>
+                    <div class="threat-glass-chip" data-level="HIGH">🟠 Stalked / Unsafe</div>
+                    <div class="threat-glass-chip" data-level="MEDIUM">🟡 Harassment Alert</div>
+                    <div class="threat-glass-chip" data-level="MEDICAL">🔵 Medical Emergency</div>
+                </div>
+
+                <!-- Giant Pulsing Liquid Glass Panic Sphere with Parallel Ripples -->
+                <div class="sos-liquid-center">
+                    <div class="sos-ring-pulse-1"></div>
+                    <div class="sos-ring-pulse-2"></div>
+                    <button id="panicSphereBtn" class="liquid-panic-sphere">
+                        <span class="sphere-icon">⚡</span>
+                        <span class="sphere-title">SOS</span>
+                        <span class="sphere-sub">Press to Broadcast</span>
+                    </button>
+                </div>
+
+                <!-- Incident Notes Input -->
+                <textarea id="userNotes" class="glass-textarea" rows="2" placeholder="Optional context (e.g. Red SUV plate DL-9C-1234, stranger following near campus gate)"></textarea>
+
+                <!-- Real-time Glass Telemetry -->
+                <div class="telemetry-glass-grid">
+                    <div class="telem-box">
+                        <span class="telem-kpi-label">GPS Coordinates</span>
+                        <span id="telemCoords" class="telem-kpi-val">Acquiring GPS...</span>
+                    </div>
+                    <div class="telem-box">
+                        <span class="telem-kpi-label">Accuracy Radius</span>
+                        <span id="telemAccuracy" class="telem-kpi-val">±0m</span>
+                    </div>
+                    <div class="telem-box">
+                        <span class="telem-kpi-label">Battery Level</span>
+                        <span id="telemBattery" class="telem-kpi-val">Detecting...</span>
+                    </div>
+                    <div class="telem-box">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="telem-kpi-label">Audio Evidence</span>
+                            <div class="live-audio-waveform">
+                                <span class="wave-bar bar-1"></span>
+                                <span class="wave-bar bar-2"></span>
+                                <span class="wave-bar bar-3"></span>
+                                <span class="wave-bar bar-4"></span>
+                                <span class="wave-bar bar-5"></span>
+                            </div>
+                        </div>
+                        <span class="telem-kpi-val" style="color: var(--accent-cyan); display: flex; align-items: center; gap: 6px;">
+                            <span>🎙️</span> Ambient Acoustic Armed
+                        </span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <button class="liquid-btn" onclick="triggerTestAlert()">
+                        <span>🧪</span> Viva Demo Beacon
+                    </button>
+                    <button class="liquid-btn liquid-btn-danger" onclick="switchView('disguise')">
+                        <span>🧮</span> Open Calculator
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             VIEW 3: GUARDIAN & POLICE RESPONDER DASHBOARD & LIVE MAP
+             ============================================================ -->
+        <section id="view-responder" class="view-section">
+            <div class="responder-container">
+                <!-- Left: Incident Triage Feed -->
+                <div class="glass-panel queue-panel">
+                    <div class="queue-header">
+                        <div>
+                            <h3 style="font-size: 1.1rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                                <span>📡</span> Live Incident Feed
+                            </h3>
+                            <span style="font-size: 0.75rem; color: var(--text-tertiary);">Real-time dispatch synchronization</span>
+                        </div>
+                        <button class="liquid-btn" style="padding: 8px 18px; font-size: 0.78rem;" onclick="fetchAlerts()">
+                            🔄 Sync
+                        </button>
+                    </div>
+
+                    <!-- KPI Ribbon -->
+                    <div class="queue-kpi-ribbon">
+                        <div class="kpi-mini-card">
+                            <div id="statActive" class="kpi-mini-num" style="color: var(--accent-red);">0</div>
+                            <div class="kpi-mini-lbl">Active</div>
+                        </div>
+                        <div class="kpi-mini-card">
+                            <div id="statDispatched" class="kpi-mini-num" style="color: var(--accent-orange);">0</div>
+                            <div class="kpi-mini-lbl">Dispatched</div>
+                        </div>
+                        <div class="kpi-mini-card">
+                            <div id="statResolved" class="kpi-mini-num" style="color: var(--accent-emerald);">0</div>
+                            <div class="kpi-mini-lbl">Resolved</div>
+                        </div>
+                        <div class="kpi-mini-card">
+                            <div id="statTotal" class="kpi-mini-num">0</div>
+                            <div class="kpi-mini-lbl">Total</div>
+                        </div>
+                    </div>
+
+                    <!-- Scrollable Incidents List -->
+                    <div id="incidentFeed" class="incidents-scrollable-list">
+                        <!-- Populated dynamically by app.js -->
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Leaflet Live GIS Map -->
+                <div class="map-panel">
+                    <div class="map-floating-bar">
+                        <button class="liquid-btn liquid-btn-danger" style="font-size: 0.82rem; padding: 10px 22px;" onclick="triggerTestAlert()">
+                            <span>⚡</span> Simulate Viva Beacon
+                        </button>
+                    </div>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             VIEW 4: GUARDIANS & TRUSTED EMERGENCY CONTACTS DIRECTORY
+             ============================================================ -->
+        <section id="view-contacts" class="view-section">
+            <div class="glass-panel contacts-wrapper">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px;">
+                    <div>
+                        <h2 style="font-size: 1.35rem; font-weight: 900;">Emergency Guardians</h2>
+                        <p style="font-size: 0.8rem; color: var(--text-tertiary);">Trusted contacts receiving automatic SMS/WhatsApp alerts</p>
+                    </div>
+                    <button class="liquid-btn liquid-btn-emerald" onclick="openAddContactModal()">
+                        <span>➕</span> Add Guardian
+                    </button>
+                </div>
+
+                <div id="contactsGrid" class="contacts-grid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Add Guardian Modal -->
+    <div id="addContactModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(14px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+        <div class="glass-panel" style="width: 100%; max-width: 460px; padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+                <h3 style="font-size: 1.2rem; font-weight: 900;">Register Guardian</h3>
+                <button onclick="closeAddContactModal()" style="background:none; border:none; color:var(--text-tertiary); font-size:1.6rem; cursor:pointer;">&times;</button>
+            </div>
+
+            <form onsubmit="handleContactSubmit(event)">
+                <div style="margin-bottom: 16px;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700; display:block; margin-bottom:6px;">Full Name</label>
+                    <input type="text" id="contactName" class="glass-textarea" style="height: 46px; margin-bottom:0;" placeholder="e.g. Dr. Ramesh / Mom" required>
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700; display:block; margin-bottom:6px;">Phone (SMS & WhatsApp)</label>
+                    <input type="tel" id="contactPhone" class="glass-textarea" style="height: 46px; margin-bottom:0;" placeholder="e.g. +91 98765 43210" required>
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700; display:block; margin-bottom:6px;">Email Address</label>
+                    <input type="email" id="contactEmail" class="glass-textarea" style="height: 46px; margin-bottom:0;" placeholder="guardian@example.com">
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700; display:block; margin-bottom:6px;">Relationship</label>
+                    <input type="text" id="contactRel" class="glass-textarea" style="height: 46px; margin-bottom:0;" placeholder="e.g. Parent, Campus Warden, Colleague">
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:22px;">
+                    <input type="checkbox" id="contactPrimary" style="cursor:pointer; width:18px; height:18px;">
+                    <label for="contactPrimary" style="font-size:0.88rem; color:var(--text-primary); cursor:pointer; font-weight:600;">Primary Priority Contact</label>
+                </div>
+                <button type="submit" class="liquid-btn liquid-btn-emerald" style="width: 100%; padding: 14px;">
+                    Save Emergency Guardian
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Broadcast Template Preview Modal -->
+    <div id="broadcastModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(14px); z-index: 2500; align-items: center; justify-content: center; padding: 20px;">
+        <div class="glass-panel" style="width: 100%; max-width: 540px; padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                <h3 style="font-size: 1.15rem; font-weight: 900;">Simulated Guardian Broadcasts</h3>
+                <button onclick="closeBroadcastModal()" style="background: none; border: none; color: var(--text-tertiary); font-size: 1.6rem; cursor: pointer;">&times;</button>
+            </div>
+
+            <div style="margin-bottom: 18px;">
+                <label style="font-size: 0.74rem; text-transform: uppercase; font-weight: 700; color: var(--text-tertiary); display: block; margin-bottom: 6px;">SMS Dispatch Payload</label>
+                <pre id="previewSms" style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; font-size: 0.82rem; color: #e2e8f0; white-space: pre-wrap; font-family: monospace;"></pre>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 0.74rem; text-transform: uppercase; font-weight: 700; color: var(--accent-emerald); display: block; margin-bottom: 6px;">WhatsApp Formatted Alert</label>
+                <pre id="previewWhatsApp" style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; font-size: 0.82rem; color: #a7f3d0; white-space: pre-wrap; font-family: monospace;"></pre>
+            </div>
+
+            <button onclick="closeBroadcastModal()" class="liquid-btn" style="width: 100%; padding: 14px;">
+                Close Broadcast Preview
+            </button>
+        </div>
+    </div>
+
+    <!-- 5-Second SOS Cancel Countdown Liquid Ring (Accidental Trigger Prevention) -->
+    <div id="sosCountdownModal" class="countdown-overlay" style="display: none;">
+        <div class="glass-panel countdown-card">
+            <h3 style="font-size: 1.3rem; font-weight: 900; margin-bottom: 6px; color: #ffccd3; letter-spacing: -0.3px;">🚨 BROADCASTING DISTRESS BEACON</h3>
+            <p style="font-size: 0.82rem; color: var(--text-tertiary); margin-bottom: 20px;">Accidental trigger? Tap below to abort before satellite dispatch.</p>
+
+            <div class="countdown-circle-wrapper">
+                <svg class="countdown-svg" width="160" height="160" viewBox="0 0 160 160">
+                    <circle class="countdown-bg-ring" cx="80" cy="80" r="70"></circle>
+                    <circle id="countdownProgressRing" class="countdown-fill-ring" cx="80" cy="80" r="70"></circle>
+                </svg>
+                <div class="countdown-number" id="countdownNumber">5</div>
+            </div>
+
+            <button class="liquid-btn liquid-btn-danger" style="width: 100%; margin-top: 20px; padding: 14px;" onclick="cancelSosCountdown()">
+                <span>❌</span> Cancel SOS (False Alarm)
+            </button>
+        </div>
+    </div>
+
+    <!-- Simulated Mobile Push Notification Alert Banner -->
+    <div id="pushNotificationBanner" class="push-alert-card" style="display: none;" onclick="dismissPushAlert()">
+        <div class="push-alert-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.25rem;">💬</span>
+                <span style="font-weight: 800; font-size: 0.88rem; color: #25D366;">WhatsApp • Mom (Primary Guardian)</span>
+            </div>
+            <span style="font-size: 0.7rem; color: #94a3b8;">just now</span>
+        </div>
+        <div class="push-alert-body" id="pushAlertContent">
+            <strong>🚨 SILENT-SOS EMERGENCY ALERT:</strong> Live GPS coordinates dispatched with ambient acoustic evidence. Tap to track route.
+        </div>
+    </div>
+
+    <!-- Floating Glass Toast -->
+    <div id="glassToast" class="glass-toast"></div>
+
+    <!-- Leaflet GIS Script -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
